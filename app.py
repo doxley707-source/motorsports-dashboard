@@ -30,54 +30,66 @@ st.set_page_config(
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap');
 
-  /* ── Global reset ── */
+  /* ── Global ── */
   html, body, [class*="css"] {
     font-family: 'Barlow', 'Segoe UI', sans-serif;
-    background-color: #07071a;
+    background-color: #0a0a0f;
   }
-  .stApp { background-color: #07071a; }
-  .block-container { padding-top: 0 !important; max-width: 960px; }
+  .stApp { background-color: #0a0a0f; }
+  .block-container { padding-top: 0 !important; max-width: 980px; }
+
+  /*
+   * COLOR SYSTEM
+   * --page-bg:    #0a0a0f  (near-black neutral)
+   * --card-bg:    #111117  (dark neutral, no blue cast)
+   * --card-border:#1e1e26
+   * --gold:       #f5a623  (primary accent — warm contrast against dark)
+   * --cyan:       #00e5ff  (timing display only)
+   * --text-hi:    #f0f0f0
+   * --text-mid:   #6b7280  (neutral gray)
+   * --text-lo:    #374151
+   */
 
   /* ═══════════════════════════════════════════
-     HERO HEADER
+     HERO
   ═══════════════════════════════════════════ */
   .hero {
     position: relative;
-    background: linear-gradient(135deg, #0a001f 0%, #07071a 55%, #0c0028 100%);
-    border-bottom: 1px solid #1a1040;
-    padding: 28px 4px 20px 4px;
+    background: #0a0a0f;
+    border-bottom: 2px solid #f5a623;
+    padding: 24px 16px 20px 16px;
     margin-bottom: 20px;
     overflow: hidden;
   }
-  /* Speed lines */
+  /* Diagonal speed lines */
   .hero::before {
     content: '';
     position: absolute;
     inset: 0;
     background: repeating-linear-gradient(
       -62deg,
-      transparent 0px, transparent 22px,
-      rgba(255,255,255,0.018) 22px, rgba(255,255,255,0.018) 23px
+      transparent 0px, transparent 24px,
+      rgba(245,166,35,0.04) 24px, rgba(245,166,35,0.04) 25px
     );
     pointer-events: none;
   }
-  /* Checkered corner */
+  /* Checkered flag fade on the right */
   .hero::after {
     content: '';
     position: absolute;
     right: 0; top: 0; bottom: 0;
-    width: 180px;
+    width: 140px;
     background-image:
-      linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
-      linear-gradient(-45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.04) 75%),
-      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.04) 75%);
-    background-size: 14px 14px;
-    background-position: 0 0, 0 7px, 7px -7px, -7px 0px;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 100%);
-    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 100%);
+      linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.05) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.05) 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 100%);
+    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 100%);
     pointer-events: none;
   }
   .hero-inner {
@@ -85,75 +97,83 @@ st.markdown("""
     z-index: 1;
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
+    flex-wrap: wrap;
   }
   .hero-flag {
-    font-size: 2.4rem;
+    font-size: 2rem;
     line-height: 1;
-    filter: drop-shadow(0 0 12px rgba(255,255,255,0.3));
+    flex-shrink: 0;
   }
+  .hero-text { flex: 1; min-width: 0; }
   .hero-title {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 2.4rem;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #ffffff;
+    color: #f0f0f0;
     line-height: 1;
-    text-shadow: 0 0 40px rgba(100,100,255,0.3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .hero-title .accent { color: #00e5ff; }
+  .hero-title .accent { color: #f5a623; }
   .hero-sub {
     font-family: 'Barlow', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 500;
-    color: #3d4a6b;
+    color: #4b5563;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     margin-top: 5px;
   }
-  .hero-date-pill {
-    margin-left: auto;
+  .hero-date {
+    flex-shrink: 0;
     text-align: right;
     font-family: 'Barlow Condensed', sans-serif;
+    border-left: 1px solid #1e1e26;
+    padding-left: 14px;
   }
-  .hero-date-pill .day {
-    font-size: 0.72rem;
+  .hero-date .day-label {
+    font-size: 0.65rem;
     font-weight: 600;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #3d4a6b;
+    color: #4b5563;
+    display: block;
   }
-  .hero-date-pill .date-num {
-    font-size: 1.8rem;
+  .hero-date .date-val {
+    font-size: clamp(1.3rem, 3vw, 1.7rem);
     font-weight: 800;
-    color: #1e1e4a;
-    line-height: 1;
+    color: #f5a623;
+    line-height: 1.1;
+    display: block;
   }
 
   /* ═══════════════════════════════════════════
      CARDS
   ═══════════════════════════════════════════ */
   .session-card {
-    background: linear-gradient(135deg, #0d0d22 0%, #111130 100%);
-    border: 1px solid #1c1c3c;
-    border-left: 4px solid var(--accent, #3949ab);
-    border-radius: 0 12px 12px 0;
-    padding: 14px 18px 12px 18px;
+    background: linear-gradient(135deg, #111117 0%, #15151c 100%);
+    border: 1px solid #1e1e26;
+    border-left: 4px solid var(--accent, #f5a623);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px 12px 16px;
     margin-bottom: 10px;
-    color: #e0e0f0;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    color: #e8e8e8;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   }
   .session-card:hover {
     transform: translateX(3px);
-    border-color: var(--accent, #3949ab);
-    box-shadow: -6px 0 24px var(--accent-glow, rgba(57,73,171,0.2)), 0 4px 20px rgba(0,0,0,0.6);
+    box-shadow: -6px 0 20px var(--accent-glow, rgba(245,166,35,0.15)), 0 4px 16px rgba(0,0,0,0.6);
   }
-  .card-f1      { --accent: #e53935; --accent-glow: rgba(229,57,53,0.2); }
-  .card-nascar  { --accent: #1565c0; --accent-glow: rgba(21,101,192,0.2); }
-  .card-indycar { --accent: #2e7d32; --accent-glow: rgba(46,125,50,0.2); }
-  .card-imsa    { --accent: #7b1fa2; --accent-glow: rgba(123,31,162,0.2); }
+  /* Series-specific accent colors */
+  .card-f1      { --accent: #e53935; --accent-glow: rgba(229,57,53,0.18); }
+  .card-nascar  { --accent: #1565c0; --accent-glow: rgba(21,101,192,0.18); }
+  .card-indycar { --accent: #2e7d32; --accent-glow: rgba(46,125,50,0.18); }
+  .card-imsa    { --accent: #7b1fa2; --accent-glow: rgba(123,31,162,0.18); }
 
   .card-top {
     display: flex;
@@ -163,248 +183,174 @@ st.markdown("""
     flex-wrap: wrap;
   }
 
-  /* ── Status badges ── */
-  @keyframes live-pulse {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.7; }
-  }
+  /* ── Badges ── */
+  @keyframes live-pulse { 0%,100%{opacity:1} 50%{opacity:0.65} }
   @keyframes live-ring {
     0%   { box-shadow: 0 0 0 0 rgba(229,57,53,0.7); }
-    70%  { box-shadow: 0 0 0 8px rgba(229,57,53,0); }
+    70%  { box-shadow: 0 0 0 7px rgba(229,57,53,0); }
     100% { box-shadow: 0 0 0 0 rgba(229,57,53,0); }
   }
   .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 10px;
-    border-radius: 4px;
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 9px;
+    border-radius: 3px;
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
     white-space: nowrap;
   }
   .badge-live {
-    background: #b71c1c;
-    color: #fff;
+    background: #b71c1c; color: #fff;
     animation: live-ring 1.8s ease-out infinite;
   }
   .badge-live::before {
-    content: '';
-    width: 6px; height: 6px;
-    background: #ff5252;
-    border-radius: 50%;
+    content: ''; width: 6px; height: 6px;
+    background: #ff5252; border-radius: 50%;
     animation: live-pulse 1s ease-in-out infinite;
   }
-  .badge-soon      { background: #e65100; color: #fff; border-radius: 4px; }
-  .badge-today     { background: #1565c0; color: #fff; border-radius: 4px; }
-  .badge-upcoming  { background: transparent; color: #455a64; border: 1px solid #1e1e3c; border-radius: 4px; }
-  .badge-completed { background: transparent; color: #263238; border: 1px solid #131313; border-radius: 4px; }
+  .badge-soon     { background: #c84b00; color: #fff; }
+  .badge-today    { background: #1a5c9e; color: #fff; }
+  .badge-upcoming { background: transparent; color: #4b5563; border: 1px solid #1e1e26; }
+  .badge-completed{ background: transparent; color: #1f2937; border: 1px solid #111; }
 
   /* ── Group pills ── */
   .group-pill {
-    display: inline-block;
-    padding: 2px 9px;
-    border-radius: 4px;
+    display: inline-block; padding: 2px 8px; border-radius: 3px;
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    white-space: nowrap;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;
   }
   .group-f1      { background: #b71c1c; color: #fff; }
   .group-nascar  { background: #0d47a1; color: #fff; }
   .group-indycar { background: #1b5e20; color: #fff; }
   .group-imsa    { background: #4a148c; color: #fff; }
-  .group-default { background: #263238; color: #90a4ae; }
+  .group-default { background: #1f2937; color: #6b7280; }
 
   /* ── Card body ── */
   .card-series {
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.75rem;
-    color: #3d4a6b;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 3px;
+    font-size: 0.72rem; font-weight: 500; color: #4b5563;
+    text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px;
   }
   .card-event {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: #eceff1;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    line-height: 1.1;
-    margin-bottom: 3px;
+    font-size: 1.3rem; font-weight: 700; color: #f0f0f0;
+    text-transform: uppercase; letter-spacing: 0.02em;
+    line-height: 1.1; margin-bottom: 3px;
   }
   .card-session {
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.82rem;
-    color: #455a64;
-    font-weight: 500;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    font-size: 0.8rem; color: #4b5563; font-weight: 500;
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
   }
-  .session-icon { font-size: 0.85rem; }
+  .session-icon { font-size: 0.82rem; }
 
   /* ── Card meta ── */
   .card-meta {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    flex-wrap: wrap;
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.86rem;
-    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 16px;
+    flex-wrap: wrap; font-size: 0.85rem; margin-bottom: 10px;
   }
   .card-time {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: #00e5ff;
+    font-size: 1rem; font-weight: 700; letter-spacing: 0.04em;
+    color: #00e5ff;            /* cyan = timing board */
     text-transform: uppercase;
   }
-  .card-location { color: #2a3a4a; font-size: 0.82rem; }
+  .card-location { color: #374151; font-size: 0.8rem; }
 
-  /* ── Watch button ── */
+  /* ── Watch row ── */
   .card-watch {
-    padding-top: 8px;
-    border-top: 1px solid #12122a;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    padding-top: 8px; border-top: 1px solid #1a1a20;
+    display: flex; align-items: center; gap: 8px;
   }
   .watch-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    background: rgba(0,229,255,0.06);
-    border: 1px solid rgba(0,229,255,0.18);
-    border-radius: 6px;
-    padding: 5px 14px;
+    display: inline-flex; align-items: center; gap: 7px;
+    background: rgba(245,166,35,0.08);
+    border: 1px solid rgba(245,166,35,0.25);
+    border-radius: 5px; padding: 5px 14px;
     font-family: 'Barlow', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #00e5ff;
-    text-decoration: none;
-    letter-spacing: 0.02em;
-    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+    font-size: 0.8rem; font-weight: 600; color: #f5a623;
+    text-decoration: none; letter-spacing: 0.02em;
+    transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
   }
   .watch-btn:hover {
-    background: rgba(0,229,255,0.14);
-    border-color: rgba(0,229,255,0.4);
-    box-shadow: 0 0 12px rgba(0,229,255,0.15);
+    background: rgba(245,166,35,0.16);
+    border-color: rgba(245,166,35,0.5);
+    box-shadow: 0 0 12px rgba(245,166,35,0.12);
     text-decoration: none;
   }
-  .watch-none    { color: #1e2a30; font-size: 0.8rem; font-style: italic; }
-  .source-link a { color: #1e2a30; font-size: 0.72rem; text-decoration: none; }
-  .source-link a:hover { color: #37474f; }
+  .watch-none    { color: #1f2937; font-size: 0.8rem; font-style: italic; }
+  .source-link a { color: #1f2937; font-size: 0.72rem; text-decoration: none; }
+  .source-link a:hover { color: #4b5563; }
 
   /* ═══════════════════════════════════════════
      EVENT WEEKEND HEADER
   ═══════════════════════════════════════════ */
   .event-weekend-header {
     position: relative;
-    margin: 36px 0 10px 0;
-    padding: 14px 20px;
-    background: linear-gradient(90deg, #090920 0%, #0b0b22 70%, #09091e 100%);
-    border-left: 3px solid #00e5ff;
-    border-radius: 0 8px 8px 0;
+    margin: 32px 0 8px 0;
+    padding: 12px 18px;
+    background: #0e0e13;
+    border-left: 3px solid #f5a623;
+    border-radius: 0 6px 6px 0;
     overflow: hidden;
   }
   .event-weekend-header::after {
     content: '';
-    position: absolute;
-    right: 0; top: 0; bottom: 0;
-    width: 160px;
+    position: absolute; right: 0; top: 0; bottom: 0; width: 120px;
     background-image:
-      linear-gradient(45deg, rgba(255,255,255,0.025) 25%, transparent 25%),
-      linear-gradient(-45deg, rgba(255,255,255,0.025) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.025) 75%),
-      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.025) 75%);
-    background-size: 12px 12px;
-    background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+      linear-gradient(45deg, rgba(245,166,35,0.04) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(245,166,35,0.04) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(245,166,35,0.04) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(245,166,35,0.04) 75%);
+    background-size: 10px 10px;
+    background-position: 0 0, 0 5px, 5px -5px, -5px 0;
     -webkit-mask-image: linear-gradient(to right, transparent 0%, black 100%);
     mask-image: linear-gradient(to right, transparent 0%, black 100%);
   }
   .ewh-name {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #d0d8f0;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    position: relative;
-    z-index: 1;
+    font-size: 1.2rem; font-weight: 700; color: #e0e0e0;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    position: relative; z-index: 1;
   }
   .ewh-meta {
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.72rem;
-    color: #2a3550;
-    margin-top: 3px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    position: relative;
-    z-index: 1;
+    font-size: 0.7rem; color: #374151; margin-top: 3px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    position: relative; z-index: 1;
   }
 
   /* ═══════════════════════════════════════════
-     NEXT-UP / SECTION LABELS
+     NEXT-UP LABEL
   ═══════════════════════════════════════════ */
   .next-up-label {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #00e5ff;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin: 28px 0 10px 0;
-    padding-left: 10px;
-    border-left: 2px solid #00e5ff;
+    font-size: 0.78rem; font-weight: 700; color: #f5a623;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    margin: 24px 0 10px 0;
+    padding-left: 10px; border-left: 2px solid #f5a623;
   }
 
   /* ═══════════════════════════════════════════
      EMPTY STATE
   ═══════════════════════════════════════════ */
   .no-sessions {
-    text-align: center;
-    color: #1e2a30;
+    text-align: center; color: #1f2937;
     font-family: 'Barlow', sans-serif;
-    font-size: 1rem;
-    padding: 72px 24px;
-    line-height: 1.9;
+    font-size: 1rem; padding: 64px 24px; line-height: 1.9;
   }
   .no-sessions strong {
     font-family: 'Barlow Condensed', sans-serif;
-    color: #2a3a4a;
-    display: block;
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
+    color: #374151; display: block;
+    font-size: 1.25rem; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 8px;
   }
 
   /* ═══════════════════════════════════════════
      MISC
   ═══════════════════════════════════════════ */
-  .refresh-ok   { color: #66bb6a; }
-  .refresh-fail { color: #ef5350; }
-  .refresh-warn { color: #ffa726; }
-  .last-refreshed {
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.72rem;
-    color: #1e2a30;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
+  .refresh-ok   { color: #4ade80; }
+  .refresh-fail { color: #f87171; }
+  .refresh-warn { color: #fb923c; }
+  .last-refreshed { font-size: 0.72rem; color: #374151; letter-spacing: 0.04em; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -672,19 +618,18 @@ def main():
     _now = now_eastern()
 
     # ── Hero header ──
+    _refreshed_line = ("Last refreshed " + last_refreshed) if last_refreshed else "Never refreshed — click Refresh below"
     st.markdown(f"""
     <div class="hero">
       <div class="hero-inner">
         <div class="hero-flag">🏁</div>
-        <div>
+        <div class="hero-text">
           <div class="hero-title">MOTORSPORTS <span class="accent">DASHBOARD</span></div>
-          <div class="hero-sub">2026 Season &nbsp;·&nbsp; All times Eastern
-            {"&nbsp;·&nbsp; Last refreshed " + last_refreshed if last_refreshed else "&nbsp;·&nbsp; Data not loaded yet"}
-          </div>
+          <div class="hero-sub">2026 Season &nbsp;·&nbsp; All times Eastern &nbsp;·&nbsp; {_refreshed_line}</div>
         </div>
-        <div class="hero-date-pill">
-          <div class="day">{_now.strftime("%A")}</div>
-          <div class="date-num">{_now.strftime("%b %d").replace(" 0"," ")}</div>
+        <div class="hero-date">
+          <span class="day-label">{_now.strftime("%A")}</span>
+          <span class="date-val">{_now.strftime("%b %d").replace(" 0", " ")}</span>
         </div>
       </div>
     </div>
