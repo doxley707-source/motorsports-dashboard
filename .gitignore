@@ -1,0 +1,22 @@
+# Data files — regenerated automatically on startup
+data/events.csv
+data/metadata.json
+data/backups/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.Python
+
+# Local Streamlit config
+.streamlit/secrets.toml
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp

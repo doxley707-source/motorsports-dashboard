@@ -1,0 +1,39 @@
+{
+  "series_groups": [
+    {
+      "group": "Formula 1",
+      "series": ["Formula 1", "Porsche Mobil 1 Supercup"]
+    },
+    {
+      "group": "NASCAR",
+      "series": ["NASCAR Cup Series"]
+    },
+    {
+      "group": "IndyCar",
+      "series": ["NTT IndyCar Series"]
+    },
+    {
+      "group": "IMSA",
+      "series": [
+        "IMSA WeatherTech SportsCar Championship",
+        "IMSA Michelin Pilot Challenge",
+        "Porsche Carrera Cup North America",
+        "Mazda MX-5 Cup",
+        "Lamborghini Super Trofeo North America"
+      ]
+    }
+  ],
+  "session_types": ["Practice", "Qualifying", "Sprint Qualifying", "Sprint", "Warmup", "Race"],
+  "excluded_session_types": [
+    "Autograph Session", "Ceremony", "Grid Walk", "Pre-Race Show",
+    "Driver Appearance", "Fan Event", "Hospitality", "Concert"
+  ],
+  "estimated_durations_minutes": {
+    "Practice": 60,
+    "Qualifying": 60,
+    "Sprint Qualifying": 45,
+    "Sprint": 45,
+    "Warmup": 30,
+    "Race": 120
+  }
+}

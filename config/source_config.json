@@ -1,0 +1,34 @@
+{
+  "sources": {
+    "Formula 1": {
+      "name": "Formula 1 Official",
+      "url": "https://www.formula1.com/en/racing/2025.html",
+      "type": "official_calendar",
+      "notes": "Official F1 calendar page"
+    },
+    "Porsche Mobil 1 Supercup": {
+      "name": "Porsche Supercup Official",
+      "url": "https://www.porsche.com/international/motorsportandevents/motorsport/customerracing/one-make-cups/supercup/",
+      "type": "official_calendar",
+      "notes": "Runs as F1 support series"
+    },
+    "NASCAR Cup Series": {
+      "name": "NASCAR Official Schedule",
+      "url": "https://www.nascar.com/nascar-cup-series/2025/schedule/",
+      "type": "official_calendar",
+      "notes": "Official NASCAR Cup schedule"
+    },
+    "NTT IndyCar Series": {
+      "name": "IndyCar Official Schedule",
+      "url": "https://www.indycar.com/Schedule",
+      "type": "official_calendar",
+      "notes": "Official IndyCar schedule page"
+    },
+    "IMSA": {
+      "name": "IMSA Official Schedule",
+      "url": "https://www.imsa.com/schedule/",
+      "type": "official_calendar",
+      "notes": "Official IMSA schedule, covers all series"
+    }
+  }
+}

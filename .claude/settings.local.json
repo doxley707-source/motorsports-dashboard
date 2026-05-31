@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(\\(Get-Command streamlit -ErrorAction SilentlyContinue\\).Source; python -c \"import streamlit; print\\(streamlit.__version__\\)\")",
+      "PowerShell(Test-Path *)",
+      "PowerShell(Stop-Process *)"
+    ]
+  }
+}
