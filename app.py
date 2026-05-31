@@ -38,7 +38,24 @@ st.markdown("""
     background-color: #0a0a0f;
   }
   .stApp { background-color: #0a0a0f; }
-  .block-container { padding-top: 0 !important; max-width: 980px; }
+
+  /* Remove Streamlit's default side padding so the hero can go edge-to-edge */
+  .block-container {
+    padding-top: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: 100% !important;
+  }
+  /* Re-add side padding for everything below the hero */
+  section[data-testid="stMain"] .block-container > div > div > div {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  /* But NOT the hero itself */
+  section[data-testid="stMain"] .block-container > div > div > div:first-child {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 
   /*
    * COLOR SYSTEM
@@ -59,7 +76,7 @@ st.markdown("""
     position: relative;
     background: #0a0a0f;
     border-bottom: 2px solid #f5a623;
-    padding: 24px 16px 20px 16px;
+    padding: 24px 2rem 20px 2rem;
     margin-bottom: 20px;
     overflow: hidden;
   }
@@ -108,15 +125,12 @@ st.markdown("""
   .hero-text { flex: 1; min-width: 0; }
   .hero-title {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #f0f0f0;
     line-height: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   .hero-title .accent { color: #f5a623; }
   .hero-sub {
@@ -134,6 +148,10 @@ st.markdown("""
     font-family: 'Barlow Condensed', sans-serif;
     border-left: 1px solid #1e1e26;
     padding-left: 14px;
+    margin-left: auto;
+  }
+  @media (max-width: 480px) {
+    .hero-date { display: none; }
   }
   .hero-date .day-label {
     font-size: 0.65rem;
