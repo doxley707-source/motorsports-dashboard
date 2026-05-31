@@ -30,85 +30,188 @@ st.set_page_config(
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
 
-  body, [class*="css"] { font-family: 'Inter', 'Segoe UI', sans-serif; }
+  /* ── Global reset ── */
+  html, body, [class*="css"] {
+    font-family: 'Barlow', 'Segoe UI', sans-serif;
+    background-color: #07071a;
+  }
+  .stApp { background-color: #07071a; }
+  .block-container { padding-top: 0 !important; max-width: 960px; }
 
-  /* ── Card — left accent border per series ── */
+  /* ═══════════════════════════════════════════
+     HERO HEADER
+  ═══════════════════════════════════════════ */
+  .hero {
+    position: relative;
+    background: linear-gradient(135deg, #0a001f 0%, #07071a 55%, #0c0028 100%);
+    border-bottom: 1px solid #1a1040;
+    padding: 28px 4px 20px 4px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  /* Speed lines */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -62deg,
+      transparent 0px, transparent 22px,
+      rgba(255,255,255,0.018) 22px, rgba(255,255,255,0.018) 23px
+    );
+    pointer-events: none;
+  }
+  /* Checkered corner */
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 180px;
+    background-image:
+      linear-gradient(45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255,255,255,0.04) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.04) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.04) 75%);
+    background-size: 14px 14px;
+    background-position: 0 0, 0 7px, 7px -7px, -7px 0px;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 100%);
+    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.6) 100%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .hero-flag {
+    font-size: 2.4rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 12px rgba(255,255,255,0.3));
+  }
+  .hero-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ffffff;
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(100,100,255,0.3);
+  }
+  .hero-title .accent { color: #00e5ff; }
+  .hero-sub {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #3d4a6b;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-top: 5px;
+  }
+  .hero-date-pill {
+    margin-left: auto;
+    text-align: right;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+  .hero-date-pill .day {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #3d4a6b;
+  }
+  .hero-date-pill .date-num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1e1e4a;
+    line-height: 1;
+  }
+
+  /* ═══════════════════════════════════════════
+     CARDS
+  ═══════════════════════════════════════════ */
   .session-card {
-    background: linear-gradient(135deg, #141428 0%, #1a1a35 100%);
-    border: 1px solid #252545;
+    background: linear-gradient(135deg, #0d0d22 0%, #111130 100%);
+    border: 1px solid #1c1c3c;
     border-left: 4px solid var(--accent, #3949ab);
-    border-radius: 0 14px 14px 0;
+    border-radius: 0 12px 12px 0;
     padding: 14px 18px 12px 18px;
     margin-bottom: 10px;
     color: #e0e0f0;
-    transition: border-color 0.2s, transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
   }
   .session-card:hover {
+    transform: translateX(3px);
     border-color: var(--accent, #3949ab);
-    transform: translateX(2px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    box-shadow: -6px 0 24px var(--accent-glow, rgba(57,73,171,0.2)), 0 4px 20px rgba(0,0,0,0.6);
   }
+  .card-f1      { --accent: #e53935; --accent-glow: rgba(229,57,53,0.2); }
+  .card-nascar  { --accent: #1565c0; --accent-glow: rgba(21,101,192,0.2); }
+  .card-indycar { --accent: #2e7d32; --accent-glow: rgba(46,125,50,0.2); }
+  .card-imsa    { --accent: #7b1fa2; --accent-glow: rgba(123,31,162,0.2); }
 
-  /* Per-series accent colours */
-  .card-f1      { --accent: #e53935; }
-  .card-nascar  { --accent: #1565c0; }
-  .card-indycar { --accent: #2e7d32; }
-  .card-imsa    { --accent: #6a1b9a; }
-
-  /* ── Top row ── */
   .card-top {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 7px;
+    margin-bottom: 8px;
     flex-wrap: wrap;
   }
 
-  /* ── Live badge + pulse animation ── */
-  @keyframes pulse-ring {
-    0%   { box-shadow: 0 0 0 0 rgba(211,47,47,0.6); }
-    70%  { box-shadow: 0 0 0 7px rgba(211,47,47,0); }
-    100% { box-shadow: 0 0 0 0 rgba(211,47,47,0); }
+  /* ── Status badges ── */
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.7; }
+  }
+  @keyframes live-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(229,57,53,0.7); }
+    70%  { box-shadow: 0 0 0 8px rgba(229,57,53,0); }
+    100% { box-shadow: 0 0 0 0 rgba(229,57,53,0); }
   }
   .badge {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 3px 11px;
-    border-radius: 20px;
-    font-size: 0.72rem;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
     white-space: nowrap;
   }
   .badge-live {
-    background: #c62828;
+    background: #b71c1c;
     color: #fff;
-    animation: pulse-ring 1.6s ease-out infinite;
+    animation: live-ring 1.8s ease-out infinite;
   }
   .badge-live::before {
     content: '';
-    display: inline-block;
-    width: 7px; height: 7px;
+    width: 6px; height: 6px;
     background: #ff5252;
     border-radius: 50%;
+    animation: live-pulse 1s ease-in-out infinite;
   }
-  .badge-soon      { background: #bf360c; color: #fff; }
-  .badge-today     { background: #0d47a1; color: #fff; }
-  .badge-upcoming  { background: #1a1a2e; color: #607d8b; border: 1px solid #2a2a4a; }
-  .badge-completed { background: #111; color: #37474f; }
+  .badge-soon      { background: #e65100; color: #fff; border-radius: 4px; }
+  .badge-today     { background: #1565c0; color: #fff; border-radius: 4px; }
+  .badge-upcoming  { background: transparent; color: #455a64; border: 1px solid #1e1e3c; border-radius: 4px; }
+  .badge-completed { background: transparent; color: #263238; border: 1px solid #131313; border-radius: 4px; }
 
   /* ── Group pills ── */
   .group-pill {
     display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.07em;
+    padding: 2px 9px;
+    border-radius: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     white-space: nowrap;
   }
@@ -116,14 +219,33 @@ st.markdown("""
   .group-nascar  { background: #0d47a1; color: #fff; }
   .group-indycar { background: #1b5e20; color: #fff; }
   .group-imsa    { background: #4a148c; color: #fff; }
-  .group-default { background: #37474f; color: #fff; }
+  .group-default { background: #263238; color: #90a4ae; }
 
   /* ── Card body ── */
-  .card-series  { font-size: 0.8rem; color: #90a4ae; font-weight: 500; margin-bottom: 2px; }
-  .card-event   { font-size: 1.05rem; font-weight: 700; color: #eceff1; margin-bottom: 2px; letter-spacing: -0.01em; }
+  .card-series {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.75rem;
+    color: #3d4a6b;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 3px;
+  }
+  .card-event {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #eceff1;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin-bottom: 3px;
+  }
   .card-session {
+    font-family: 'Barlow', sans-serif;
     font-size: 0.82rem;
-    color: #607d8b;
+    color: #455a64;
+    font-weight: 500;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
@@ -131,85 +253,158 @@ st.markdown("""
   }
   .session-icon { font-size: 0.85rem; }
 
-  /* ── Card meta row ── */
+  /* ── Card meta ── */
   .card-meta {
     display: flex;
     align-items: center;
     gap: 18px;
     flex-wrap: wrap;
+    font-family: 'Barlow', sans-serif;
     font-size: 0.86rem;
     margin-bottom: 10px;
   }
-  .card-time     { color: #26c6da; font-weight: 700; letter-spacing: 0.01em; }
-  .card-location { color: #546e7a; }
+  .card-time {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #00e5ff;
+    text-transform: uppercase;
+  }
+  .card-location { color: #2a3a4a; font-size: 0.82rem; }
 
   /* ── Watch button ── */
   .card-watch {
     padding-top: 8px;
-    border-top: 1px solid #1e1e3a;
+    border-top: 1px solid #12122a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
   .watch-btn {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    background: rgba(38,198,218,0.1);
-    border: 1px solid rgba(38,198,218,0.25);
-    border-radius: 8px;
+    background: rgba(0,229,255,0.06);
+    border: 1px solid rgba(0,229,255,0.18);
+    border-radius: 6px;
     padding: 5px 14px;
-    font-size: 0.82rem;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.8rem;
     font-weight: 600;
-    color: #26c6da;
+    color: #00e5ff;
     text-decoration: none;
-    transition: background 0.15s, border-color 0.15s;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
   }
   .watch-btn:hover {
-    background: rgba(38,198,218,0.2);
-    border-color: rgba(38,198,218,0.5);
+    background: rgba(0,229,255,0.14);
+    border-color: rgba(0,229,255,0.4);
+    box-shadow: 0 0 12px rgba(0,229,255,0.15);
     text-decoration: none;
   }
-  .watch-none    { color: #37474f; font-size: 0.82rem; font-style: italic; }
-  .source-link a { color: #37474f; font-size: 0.75rem; text-decoration: none; margin-left: 10px; }
-  .source-link a:hover { color: #546e7a; }
+  .watch-none    { color: #1e2a30; font-size: 0.8rem; font-style: italic; }
+  .source-link a { color: #1e2a30; font-size: 0.72rem; text-decoration: none; }
+  .source-link a:hover { color: #37474f; }
 
-  /* ── Event weekend header ── */
+  /* ═══════════════════════════════════════════
+     EVENT WEEKEND HEADER
+  ═══════════════════════════════════════════ */
   .event-weekend-header {
+    position: relative;
     margin: 36px 0 10px 0;
-    padding: 12px 16px;
-    background: linear-gradient(90deg, #0d0d1f 0%, #111130 100%);
-    border-left: 3px solid #3949ab;
-    border-radius: 0 10px 10px 0;
-    box-shadow: inset 0 0 40px rgba(57,73,171,0.05);
+    padding: 14px 20px;
+    background: linear-gradient(90deg, #090920 0%, #0b0b22 70%, #09091e 100%);
+    border-left: 3px solid #00e5ff;
+    border-radius: 0 8px 8px 0;
+    overflow: hidden;
   }
-  .ewh-name { font-size: 1rem; font-weight: 700; color: #c5cae9; letter-spacing: -0.01em; }
-  .ewh-meta { font-size: 0.78rem; color: #3d4a6b; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.06em; }
-
-  /* ── Next-up label ── */
-  .next-up-label {
-    font-size: 0.75rem;
+  .event-weekend-header::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 160px;
+    background-image:
+      linear-gradient(45deg, rgba(255,255,255,0.025) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255,255,255,0.025) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.025) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.025) 75%);
+    background-size: 12px 12px;
+    background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 100%);
+  }
+  .ewh-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.3rem;
     font-weight: 700;
-    color: #3949ab;
+    color: #d0d8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: relative;
+    z-index: 1;
+  }
+  .ewh-meta {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.72rem;
+    color: #2a3550;
+    margin-top: 3px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ═══════════════════════════════════════════
+     NEXT-UP / SECTION LABELS
+  ═══════════════════════════════════════════ */
+  .next-up-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #00e5ff;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
     margin: 28px 0 10px 0;
     padding-left: 10px;
-    border-left: 2px solid #3949ab;
+    border-left: 2px solid #00e5ff;
   }
 
-  /* ── Empty state ── */
+  /* ═══════════════════════════════════════════
+     EMPTY STATE
+  ═══════════════════════════════════════════ */
   .no-sessions {
     text-align: center;
-    color: #37474f;
+    color: #1e2a30;
+    font-family: 'Barlow', sans-serif;
     font-size: 1rem;
-    padding: 64px 24px;
-    line-height: 1.8;
+    padding: 72px 24px;
+    line-height: 1.9;
   }
-  .no-sessions strong { color: #546e7a; display: block; font-size: 1.2rem; margin-bottom: 8px; font-weight: 700; }
+  .no-sessions strong {
+    font-family: 'Barlow Condensed', sans-serif;
+    color: #2a3a4a;
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
 
-  /* ── Misc ── */
+  /* ═══════════════════════════════════════════
+     MISC
+  ═══════════════════════════════════════════ */
   .refresh-ok   { color: #66bb6a; }
   .refresh-fail { color: #ef5350; }
   .refresh-warn { color: #ffa726; }
-  .last-refreshed { font-size: 0.76rem; color: #37474f; }
+  .last-refreshed {
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.72rem;
+    color: #1e2a30;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
 </style>
 """, unsafe_allow_html=True)
 
@@ -472,20 +667,32 @@ def main():
                 run_refresh()
             st.rerun()
 
-    # Header
-    st.markdown("# 🏁 Motorsports Dashboard")
-
     meta = load_metadata()
     last_refreshed = meta.get("last_refreshed", None)
+    _now = now_eastern()
 
-    col_refresh, col_meta = st.columns([1, 4])
+    # ── Hero header ──
+    st.markdown(f"""
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-flag">🏁</div>
+        <div>
+          <div class="hero-title">MOTORSPORTS <span class="accent">DASHBOARD</span></div>
+          <div class="hero-sub">2026 Season &nbsp;·&nbsp; All times Eastern
+            {"&nbsp;·&nbsp; Last refreshed " + last_refreshed if last_refreshed else "&nbsp;·&nbsp; Data not loaded yet"}
+          </div>
+        </div>
+        <div class="hero-date-pill">
+          <div class="day">{_now.strftime("%A")}</div>
+          <div class="date-num">{_now.strftime("%b %d").replace(" 0"," ")}</div>
+        </div>
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col_refresh, col_spacer = st.columns([1, 5])
     with col_refresh:
         do_refresh = st.button("🔄 Refresh All Schedules", use_container_width=True)
-    with col_meta:
-        if last_refreshed:
-            st.markdown(f'<div class="last-refreshed">Last refreshed: {last_refreshed}</div>', unsafe_allow_html=True)
-        else:
-            st.markdown('<div class="last-refreshed">Never refreshed — click Refresh All Schedules to load data.</div>', unsafe_allow_html=True)
 
     if do_refresh:
         with st.spinner("Refreshing all schedules..."):
