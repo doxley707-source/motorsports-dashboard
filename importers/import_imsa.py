@@ -17,11 +17,18 @@ no practice/qualifying. Only the main race event per round is imported.
 
 import requests
 import re
-from datetime import datetime
+import os
+import json
+import zoneinfo
+from datetime import datetime, date, timezone
 from bs4 import BeautifulSoup
 from utils.normalize import normalize_records
 
 CURRENT_YEAR = datetime.now().year
+EASTERN = zoneinfo.ZoneInfo("America/New_York")
+RACE_TIMES_PATH = os.path.join(
+    os.path.dirname(__file__), "..", "config", "imsa_race_times.json"
+)
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
 
 WATCH_PLATFORM = "Peacock / NBC / USA Network"
@@ -99,6 +106,66 @@ def _parse_date(date_str: str, year: int) -> str:
         except ValueError:
             continue
     return ""
+
+
+def _load_race_times() -> dict:
+    """Load curated race start times. Returns {} if missing or wrong season."""
+    try:
+        with open(RACE_TIMES_PATH) as f:
+            data = json.load(f)
+        if data.get("season") != CURRENT_YEAR:
+            return {}
+        return data
+    except Exception:
+        return {}
+
+
+def _apply_race_time(record: dict, overlay: dict) -> bool:
+    """If a curated race time matches this record, upgrade its date-only
+    start_datetime to a full UTC datetime. Returns True if applied.
+
+    A match requires BOTH a track/event keyword hit AND the curated date
+    within 3 days of the Wikipedia date — so a rescheduled event falls back
+    to date-only rather than showing a stale wrong time."""
+    if overlay.get("series") != record.get("series"):
+        return False
+    if record.get("session_type") != "Race":
+        return False
+
+    haystack = " ".join([
+        record.get("event_name", ""),
+        record.get("track", ""),
+        record.get("location", ""),
+    ]).lower()
+
+    try:
+        wiki_date = date.fromisoformat(record["start_datetime"])
+    except (ValueError, KeyError):
+        return False
+
+    for race in overlay.get("races", []):
+        if not any(kw in haystack for kw in race.get("match", [])):
+            continue
+        try:
+            curated_date = date.fromisoformat(race["date"])
+            hour, minute = map(int, race["time_et"].split(":"))
+        except (ValueError, KeyError):
+            continue
+        if abs((curated_date - wiki_date).days) > 3:
+            continue
+
+        start_et = datetime(curated_date.year, curated_date.month,
+                            curated_date.day, hour, minute, tzinfo=EASTERN)
+        record["start_datetime"] = start_et.astimezone(timezone.utc).isoformat()
+        if race.get("platform"):
+            record["watch_platform"] = race["platform"]
+        record["data_confidence"] = "high"
+        record["notes"] = (
+            f"Race start time from {overlay.get('source', 'broadcast schedule')}."
+            + (f" {race['note']}." if race.get("note") else "")
+        )
+        return True
+    return False
 
 
 def _split_circuit_location(merged: str) -> tuple[str, str]:
@@ -212,12 +279,21 @@ def run() -> tuple[list[dict], dict]:
         all_records.extend(records)
         summary["errors"].extend(errors)
 
+    overlay = _load_race_times()
+    timed = sum(_apply_race_time(r, overlay) for r in all_records) if overlay else 0
+
     summary["success"] = len(all_records) > 0
     summary["added"] = len(all_records)
 
     if summary["success"]:
-        summary["errors"].append(
-            "Note: IMSA data from Wikipedia — race dates only, no session times."
-        )
+        if timed:
+            summary["errors"].append(
+                f"Note: {timed} WeatherTech race start times applied from the "
+                f"{CURRENT_YEAR} broadcast schedule. Other IMSA series remain date-only."
+            )
+        else:
+            summary["errors"].append(
+                "Note: IMSA data from Wikipedia — race dates only, no session times."
+            )
 
     return normalize_records(all_records), summary
