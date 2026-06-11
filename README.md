@@ -30,7 +30,7 @@ Each session card shows:
 | Formula 1 | Porsche Mobil 1 Supercup | Race | ✔ Dates (Wikipedia) |
 | NASCAR | NASCAR Cup Series | Race | ✔ Full (ESPN) |
 | IndyCar | NTT IndyCar Series | Race | ✔ Full (ESPN) |
-| IMSA | WeatherTech SportsCar Championship | Race | ✔ Dates (Wikipedia) |
+| IMSA | WeatherTech SportsCar Championship | Race | ✔ Dates (Wikipedia) + race times (broadcast schedule) |
 | IMSA | Michelin Pilot Challenge | Race | ✔ Dates (Wikipedia) |
 | IMSA | Porsche Carrera Cup North America | Race | ✔ Dates (Wikipedia) |
 | IMSA | Mazda MX-5 Cup | Race | ✔ Dates (Wikipedia) |
@@ -38,7 +38,7 @@ Each session card shows:
 
 **Notes:**
 - F1 and NASCAR/IndyCar races include broadcast info (Apple TV+, FOX, NBC, Prime Video, etc.)
-- IMSA events show date only — specific start times are not available from free sources
+- IMSA WeatherTech races show real start times, merged from the season's NBC/IMSA broadcast schedule (`config/imsa_race_times.json`). IMSA support series (Pilot Challenge, Carrera Cup, MX-5, Super Trofeo) remain date-only — their times aren't published in machine-readable form
 - NASCAR and IndyCar show race events only — practice/qualifying times are not available from free sources
 - All data uses official or reliable third-party sources. No paid APIs or API keys required.
 
@@ -173,8 +173,9 @@ Save the file and refresh your browser to see the change.
 - Make sure `start_datetime` in your CSV includes timezone info (e.g. `+00:00` or `Z` at the end)
 
 **IMSA events show "Date only — time TBA":**
-- This is expected — IMSA race start times aren't available from free public sources
-- Add the specific start time manually to `data/events.csv` if you know it
+- WeatherTech races should show real start times after a refresh. If one doesn't, the event may have been rescheduled — update its entry in `config/imsa_race_times.json`
+- Support series (Pilot Challenge, Carrera Cup, MX-5, Super Trofeo) are expected to be date-only
+- For a new season, update `config/imsa_race_times.json` with the new broadcast schedule (the file's `season` must match the current year, otherwise it's ignored)
 
 **The CSV is missing:**
 - Click Refresh All Schedules to create it automatically

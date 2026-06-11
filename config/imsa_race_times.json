@@ -1,0 +1,23 @@
+{
+  "_comment": "Race start times for IMSA WeatherTech rounds. Wikipedia (the schedule source) only provides dates, so the importer merges these times in when track keywords and dates line up. Times are US Eastern, 24-hour. Update this file when IMSA/NBC publish a new season's broadcast schedule.",
+  "season": 2026,
+  "series": "IMSA WeatherTech SportsCar Championship",
+  "source": "NBC Sports / IMSA 2026 broadcast schedule (announced Dec 18, 2025)",
+  "source_urls": [
+    "https://www.imsa.com/news/2025/12/18/nbc-sports-to-present-160-hours-of-2026-imsa-coverage-across-nbc-peacock-and-nbcsn/",
+    "https://www.nbcsports.com/pressbox/press-releases/nbc-sports-to-present-160-hours-of-2026-imsa-coverage-across-nbc-peacock-and-nbcsn"
+  ],
+  "races": [
+    {"match": ["daytona"],                  "date": "2026-01-24", "time_et": "13:30", "platform": "NBC / Peacock",  "note": "Rolex 24 — broadcast 1:30 PM ET, green flag ~1:40 PM"},
+    {"match": ["sebring"],                  "date": "2026-03-21", "time_et": "10:00", "platform": "Peacock"},
+    {"match": ["long beach"],               "date": "2026-04-18", "time_et": "16:00", "platform": "NBC / Peacock"},
+    {"match": ["laguna"],                   "date": "2026-05-03", "time_et": "16:00", "platform": "Peacock"},
+    {"match": ["detroit"],                  "date": "2026-05-30", "time_et": "16:00", "platform": "NBC / Peacock"},
+    {"match": ["watkins glen", "the glen"], "date": "2026-06-28", "time_et": "12:00", "platform": "NBC / Peacock"},
+    {"match": ["canadian tire", "mosport"], "date": "2026-07-12", "time_et": "14:00", "platform": "Peacock"},
+    {"match": ["road america", "elkhart"],  "date": "2026-08-02", "time_et": "13:30", "platform": "Peacock"},
+    {"match": ["virginia"],                 "date": "2026-08-23", "time_et": "12:00", "platform": "NBC / Peacock"},
+    {"match": ["indianapolis"],             "date": "2026-09-20", "time_et": "15:00", "platform": "NBC / Peacock"},
+    {"match": ["road atlanta", "petit"],    "date": "2026-10-03", "time_et": "12:00", "platform": "NBC / Peacock"}
+  ]
+}
