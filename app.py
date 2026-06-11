@@ -33,28 +33,24 @@ st.markdown("""
   @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600;700&display=swap');
 
   /* ── Global ── */
+  :root { --side-pad: 1.5rem; }
+  @media (max-width: 640px) { :root { --side-pad: 1rem; } }
+
   html, body, [class*="css"] {
     font-family: 'Barlow', 'Segoe UI', sans-serif;
     background-color: #0a0a0f;
   }
   .stApp { background-color: #0a0a0f; }
 
-  /* Remove Streamlit's default side padding so the hero can go edge-to-edge */
+  /* Hide Streamlit's fixed header (Deploy button / menu) — it overlaps and
+     clips the hero when top padding is removed */
+  header[data-testid="stHeader"] { display: none !important; }
+
+  /* Normal side padding on the container; the hero breaks out of it with
+     negative margins below. No dependence on Streamlit's internal DOM. */
   .block-container {
-    padding-top: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding: 0 var(--side-pad) 4rem var(--side-pad) !important;
     max-width: 100% !important;
-  }
-  /* Re-add side padding for everything below the hero */
-  section[data-testid="stMain"] .block-container > div > div > div {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-  /* But NOT the hero itself */
-  section[data-testid="stMain"] .block-container > div > div > div:first-child {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
   }
 
   /*
@@ -77,8 +73,12 @@ st.markdown("""
     background: #0a0a0f;
     border-bottom: 2px solid #f5a623;
     padding: 24px 2rem 20px 2rem;
-    margin-bottom: 20px;
+    /* Full-bleed: cancel the container's side padding */
+    margin: 0 calc(-1 * var(--side-pad)) 20px calc(-1 * var(--side-pad));
     overflow: hidden;
+  }
+  @media (max-width: 640px) {
+    .hero { padding: 18px 1rem 16px 1rem; }
   }
   /* Diagonal speed lines */
   .hero::before {
